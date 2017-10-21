@@ -1,0 +1,46 @@
+Parameters:
+  CloudfrontOriginAccessIdentity:
+    Description: ID of the Cloudfront Origin Access Identity    
+    Type: String
+
+Resources:
+
+  BlogS3Bucket:   
+    Type: AWS::S3::Bucket
+  
+  BlogCloudfront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        DefaultRootObject: index.html
+        Enabled: true
+        Origins:
+        - Id: blog-s3-bucket-cloudfront 
+          DomainName: !GetAtt BlogS3Bucket.DomainName
+          S3OriginConfig:
+            OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudfrontOriginAccessIdentity}
+        DefaultCacheBehavior:
+          TargetOriginId: blog-s3-bucket-cloudfront
+          ViewerProtocolPolicy: allow-all # for now
+          ForwardedValues:       
+            QueryString: false  
+
+
+
+  TravisUser: 
+    Type: AWS::IAM::User
+    Properties:
+      Policies:
+      - PolicyName: allow-s3
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:get*
+            - s3:list*
+            - s3:put*
+            Resource:
+            - !GetAtt BlogS3Bucket.Arn
+            - !Sub "${BlogS3Bucket.Arn}/*"
+
