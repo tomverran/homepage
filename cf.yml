@@ -1,19 +1,37 @@
 Parameters:
+
   CloudfrontOriginAccessIdentity:
-    Description: ID of the Cloudfront Origin Access Identity    
+    Type: String
+
+  CloudfrontCanonicalUserId:
     Type: String
 
 Resources:
 
   BlogS3Bucket:   
     Type: AWS::S3::Bucket
-  
+
+  BlogS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref BlogS3Bucket
+      PolicyDocument:
+        Statement:
+        - Action: s3:GetObject       
+          Effect: Allow
+          Resource:
+          - !Sub "${BlogS3Bucket.Arn}/*"
+          Principal:
+            CanonicalUser: !Ref CloudfrontCanonicalUserId
+
   BlogCloudfront:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         DefaultRootObject: index.html
         Enabled: true
+        Aliases:
+        - tvc.io
         Origins:
         - Id: blog-s3-bucket-cloudfront 
           DomainName: !GetAtt BlogS3Bucket.DomainName
@@ -21,11 +39,34 @@ Resources:
             OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudfrontOriginAccessIdentity}
         DefaultCacheBehavior:
           TargetOriginId: blog-s3-bucket-cloudfront
-          ViewerProtocolPolicy: allow-all # for now
+          ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:       
             QueryString: false  
 
+  TvcIoZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: tvc.io.
 
+  TvcIoRecordSet:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Ref TvcIoZone
+      RecordSets:
+      - Name: tvc.io.
+        Type: A
+        AliasTarget:
+          DNSName: !GetAtt BlogCloudfront.DomainName
+          HostedZoneId: Z2FDTNDATAQYW2 # magic cloudfront string
+      - Name: tvc.io.
+        Type: MX
+        TTL: 3600
+        ResourceRecords:
+        - "1 aspmx.l.google.com"
+        - "5 alt1.aspmx.l.google.com"
+        - "5 alt2.aspmx.l.google.com"
+        - "10 aspmx2.googlemail.com"
+        - "10 aspmx3.googlemail.com"
 
   TravisUser: 
     Type: AWS::IAM::User
