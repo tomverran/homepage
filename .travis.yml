@@ -2,7 +2,7 @@ script:
 - wget https://github.com/gohugoio/hugo/releases/download/v0.30.2/hugo_0.30.2_Linux-64bit.tar.gz
 - tar -zxf hugo* hugo
 - chmod +x hugo
-- ./hugo --theme cactus-plus
+- ./hugo
 
 deploy:
   provider: s3

@@ -6,6 +6,9 @@ Parameters:
   CloudfrontCanonicalUserId:
     Type: String
 
+  AcmCertificateArn:
+    Type: String
+
 Resources:
 
   BlogS3Bucket:   
@@ -37,6 +40,9 @@ Resources:
           DomainName: !GetAtt BlogS3Bucket.DomainName
           S3OriginConfig:
             OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudfrontOriginAccessIdentity}
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn # has to be in us-east-1
+          SslSupportMethod: sni-only # vip is $600 / month!
         DefaultCacheBehavior:
           TargetOriginId: blog-s3-bucket-cloudfront
           ViewerProtocolPolicy: redirect-to-https
@@ -59,7 +65,7 @@ Resources:
           DNSName: !GetAtt BlogCloudfront.DomainName
           HostedZoneId: Z2FDTNDATAQYW2 # magic cloudfront string
       - Name: tvc.io.
-        Type: MX
+        Type: MX 
         TTL: 3600
         ResourceRecords:
         - "1 aspmx.l.google.com"

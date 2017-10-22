@@ -1,3 +1,4 @@
 baseURL = "https://tvc.io/"
 languageCode = "en-gb"
+theme = "cactus-plus"
 title = "tvc.io"
