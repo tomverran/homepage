@@ -12,6 +12,7 @@ deploy:
   region: eu-west-1
   skip_cleanup: true
   local_dir: public
+  acl: public_read
 
 env:
   global:

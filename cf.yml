@@ -1,11 +1,5 @@
 Parameters:
 
-  CloudfrontOriginAccessIdentity:
-    Type: String
-
-  CloudfrontCanonicalUserId:
-    Type: String
-
   AcmCertificateArn:
     Type: String
 
@@ -13,19 +7,10 @@ Resources:
 
   BlogS3Bucket:   
     Type: AWS::S3::Bucket
-
-  BlogS3BucketPolicy:
-    Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref BlogS3Bucket
-      PolicyDocument:
-        Statement:
-        - Action: s3:GetObject       
-          Effect: Allow
-          Resource:
-          - !Sub "${BlogS3Bucket.Arn}/*"
-          Principal:
-            CanonicalUser: !Ref CloudfrontCanonicalUserId
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
 
   BlogCloudfront:
     Type: AWS::CloudFront::Distribution
@@ -37,9 +22,11 @@ Resources:
         - tvc.io
         Origins:
         - Id: blog-s3-bucket-cloudfront 
-          DomainName: !GetAtt BlogS3Bucket.DomainName
-          S3OriginConfig:
-            OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudfrontOriginAccessIdentity}
+          DomainName: !Sub "${BlogS3Bucket}.s3-website-${AWS::Region}.${AWS::URLSuffix}"
+          CustomOriginConfig:
+            HTTPPort: 80
+            HTTPSPort: 443
+            OriginProtocolPolicy: http-only
         ViewerCertificate:
           AcmCertificateArn: !Ref AcmCertificateArn # has to be in us-east-1
           SslSupportMethod: sni-only # vip is $600 / month!
