@@ -1,0 +1,14 @@
+{{ define "main" }}
+<div class="theme_header">
+  <img src="images/duck.svg" class="author_image"/>
+  <h1 class="author_name">{{ .Params.name }}</h1>
+  <p class="author_quote">{{ .Params.quote }}</p>
+</div>
+<div class="recent_posts">
+  <h2>Recent posts</h2>
+  {{ range .Pages }}
+    <h3 class="recent_post_title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+  {{ end }}
+</div>
+{{ .Content }}
+{{ end }}

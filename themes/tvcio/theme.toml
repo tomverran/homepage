@@ -1,0 +1,10 @@
+name = "tvcio"
+description = "TVC IO Theme"
+homepage = "https://tvc.io"
+tags = []
+features = []
+min_version = "0.41.0"
+
+[author]
+  name = "Tom Verran"
+  homepage = "https://tvc.io"

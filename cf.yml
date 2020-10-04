@@ -60,16 +60,6 @@ Resources:
         - "5 alt2.aspmx.l.google.com"
         - "10 aspmx2.googlemail.com"
         - "10 aspmx3.googlemail.com"
-      - Name: spoiler-free.tvc.io.
-        Type: CNAME 
-        TTL: 600
-        ResourceRecords:
-        - "spoiler-free.tvc.io.herokudns.com"
-      - Name: tube.tvc.io.
-        Type: CNAME 
-        TTL: 600
-        ResourceRecords:
-        - "tube.tvc.io.herokudns.com"
 
   TravisUser: 
     Type: AWS::IAM::User
@@ -87,4 +77,10 @@ Resources:
             Resource:
             - !GetAtt BlogS3Bucket.Arn
             - !Sub "${BlogS3Bucket.Arn}/*"
+          - Effect: Allow
+            Action:
+            - cloudfront:CreateInvalidation
+            Resource:
+            - !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${BlogCloudfront}"
+          
 

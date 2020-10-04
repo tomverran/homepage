@@ -1,0 +1,63 @@
+.theme_header {
+  text-align: center;
+}
+
+.theme_header .author_image {
+  padding-top: 10px;  
+  height: 128px;
+  width: 128px;
+}
+
+.theme_header .author_name {
+  font-size: 2rem;  
+  padding: 10px;
+}
+
+.theme_header .author_quote {
+  color: #888;
+}
+
+.recent_posts {
+  margin: 120px auto;
+  max-width: 800px;
+}
+
+.recent_posts h2 {
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-size: 2rem;  
+  display: block;
+  padding: 10px;
+}
+
+.single_post h1 {
+  font-size: 32px;
+  line-height: 48px;
+  margin-bottom: 24px;
+}
+
+.single_post h2 {
+  font-size: 27px;
+  line-height: 36px;
+  margin-bottom: 24px;
+}
+
+.single_post {
+  max-width: 800px;
+  margin: auto;
+}
+
+.single_post p {
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.single_post img, .single_post video, .single_post iframe {
+  padding: 24px;
+  border: 1px solid #ddd;
+  margin: 24px auto;
+  display: block;
+  width: 100%;
+}
