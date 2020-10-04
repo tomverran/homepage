@@ -3,10 +3,11 @@ python: ['3.8']
 sudo: false
 script:
 - curl https://avatars3.githubusercontent.com/u/1388226 --create-dirs -o static/images/avatar.png
-- wget https://github.com/gohugoio/hugo/releases/download/v0.30.2/hugo_0.30.2_Linux-64bit.tar.gz
+- wget https://github.com/gohugoio/hugo/releases/download/v0.75.1/hugo_0.75.1_Linux-64bit.tar.gz
 - tar -zxf hugo* hugo
 - chmod +x hugo
 - "./hugo"
+
 deploy:
   provider: s3
   access_key_id: "$AWS_ACCESS_KEY_ID"
@@ -16,10 +17,12 @@ deploy:
   skip_cleanup: true
   local_dir: public
   acl: public_read
+
 after_deploy:
   - pip install --user awscli
   - export PATH="${PATH}:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
   - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*" > /dev/null
+
 env:
   global:
   - secure: Hfd4CwGs+jUxN/XQmJAjQCmIA4SQnuSuWnXfaES6WHArWK468xRUZlVygOLpThKRiGhYbp7W5BFCXWeiqO/IakV5BmZDALZBMqNreXTVx64fKohyMYjTTLD5lr/A2b+Z4WgYREmuS/EbvnRvuBUvSap/c19c7L2gSchOJpocLXsbFXZ6XaD47tYyDsMiC8fnXwuI4XzC/LN8AktSko5rRCYS8Eu9PXzHYih1vagpq+wWTkMo1nPxWN4NeU2tZ2MJwuX8sPXTyEPBXjIXG1hUX+hF8I5egiemKjGQRO7ypt3A2+4UrNcFV9Nlaf2ipp1xmoeOF7Wm8rfUawLenjQtqzX3IvOwuet8nmvPkzSAFao1J/X/ZI+7uBXF+Ye9io8UKiUjbTNdMhkFQ9dN2yPUxbhwucrZk1FUk4+WyXvPyyMfnQpjT3vQUn0zB9xnye5JPX+2rmEj7vnvDfaohHaeYEULFYHeq+eL5HkE5+B5x6k5f/FVu9HEajYCj4JrMjIhdjpcIdnwwXuTWO8rcoiir7vf+lArSQFPU0p9nkiuunPmN8OFodJpgfmBw3JFAxcUjzmXh3Tx7IOuWagsi0WgVldUzixzlNjJSqi3LcBwg20u/KfTUvMRfl1njuantw33yokf7VYlFAeTnc6MWoCwC5Swoav2cZKeExMwpx1fqPY=
