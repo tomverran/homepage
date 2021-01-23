@@ -127,6 +127,8 @@ Resources:
             Resource:
             - !GetAtt BlogS3Bucket.Arn
             - !Sub "${BlogS3Bucket.Arn}/*"
+            - !GetAtt TomVerranS3Bucket.Arn
+            - !Sub "${TomVerranS3Bucket.Arn}/*"
           - Effect: Allow
             Action:
             - cloudfront:CreateInvalidation
