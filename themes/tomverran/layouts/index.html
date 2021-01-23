@@ -1,0 +1,34 @@
+{{ define "main" }}
+  
+  <h1 class="mt-2 mb-4 text-center">{{ .Site.Title }}</h1>
+
+  <div class="row mb-2">
+    {{ .Content }}
+  </div>
+  
+  {{ $pages := slice }}
+  {{ range (where (readDir "content") ".IsDir" true) }}
+    {{ with $.GetPage .Name }} {{ $pages = $pages | append . }} {{ end }}
+  {{ end }}
+
+  {{ range sort $pages ".Date" "desc" }}
+      <div class="row mb-2">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="row mb-2 mb-md-1">
+              <div class="col-md">
+                <h5>{{ .Title }}</h5>
+              </div>
+              <div class="col-md text-md-end">
+                {{ range .Params.techs | sort }}<span class="badge tech-{{ lower . }} bg-light text-dark me-1 border">{{ . }}</span>{{ end }}
+              </div>
+            </div>
+            <h6 class="card-subtitle mb-2 text-muted">Created {{ .Date.Format "January 2006" }}</h6>
+            <p class="card-text">{{ .Content }}</p>
+            {{ range $title, $url := .Params.links }}<a class="card-link" href="{{ $url }}">{{ $title | humanize }}</a>{{ end }}
+          </div>
+        </div>
+      </div>
+  {{ end }}
+
+{{ end }}

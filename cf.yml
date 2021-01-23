@@ -3,9 +3,19 @@ Parameters:
   AcmCertificateArn:
     Type: String
 
+  TomVerranCertificateArn:
+    Type: String
+
 Resources:
 
   BlogS3Bucket:   
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+  TomVerranS3Bucket:   
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
@@ -36,10 +46,50 @@ Resources:
           ForwardedValues:       
             QueryString: false  
 
+  TomVerranCloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        DefaultRootObject: index.html
+        Enabled: true
+        Aliases:
+        - tomverran.uk
+        Origins:
+        - Id: tv-s3-bucket-cloudfront 
+          DomainName: !Sub "${TomVerranS3Bucket}.s3-website-${AWS::Region}.${AWS::URLSuffix}"
+          CustomOriginConfig:
+            HTTPPort: 80
+            HTTPSPort: 443
+            OriginProtocolPolicy: http-only
+        ViewerCertificate:
+          AcmCertificateArn: !Ref TomVerranCertificateArn # has to be in us-east-1
+          SslSupportMethod: sni-only # vip is $600 / month!
+        DefaultCacheBehavior:
+          TargetOriginId: tv-s3-bucket-cloudfront
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:       
+            QueryString: false  
+
   TvcIoZone:
     Type: AWS::Route53::HostedZone
     Properties:
       Name: tvc.io.
+
+  TomVerranZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: tomverran.uk.
+
+  TomVeranRecordSet:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Ref TomVerranZone
+      RecordSets:
+      - Name: tomverran.uk.
+        Type: A
+        AliasTarget:
+          DNSName: !GetAtt TomVerranCloudFront.DomainName
+          HostedZoneId: Z2FDTNDATAQYW2 # magic cloudfront string
 
   TvcIoRecordSet:
     Type: AWS::Route53::RecordSetGroup
@@ -60,16 +110,6 @@ Resources:
         - "5 alt2.aspmx.l.google.com"
         - "10 aspmx2.googlemail.com"
         - "10 aspmx3.googlemail.com"
-      - Name: spoiler-free.tvc.io.
-        Type: CNAME 
-        TTL: 600
-        ResourceRecords:
-        - "spoiler-free.tvc.io.herokudns.com"
-      - Name: tube.tvc.io.
-        Type: CNAME 
-        TTL: 600
-        ResourceRecords:
-        - "tube.tvc.io.herokudns.com"
 
   TravisUser: 
     Type: AWS::IAM::User
@@ -87,4 +127,9 @@ Resources:
             Resource:
             - !GetAtt BlogS3Bucket.Arn
             - !Sub "${BlogS3Bucket.Arn}/*"
-
+          - Effect: Allow
+            Action:
+            - cloudfront:CreateInvalidation
+            Resource:
+            - !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${BlogCloudfront}"
+          

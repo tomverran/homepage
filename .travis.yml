@@ -1,22 +1,29 @@
+language: minimal
+python: ['3.8']
+sudo: false
 script:
-- curl https://avatars3.githubusercontent.com/u/1388226 --create-dirs -o static/images/avatar.png
-- wget https://github.com/gohugoio/hugo/releases/download/v0.30.2/hugo_0.30.2_Linux-64bit.tar.gz
+- wget https://github.com/gohugoio/hugo/releases/download/v0.80.0/hugo_0.80.0_Linux-64bit.tar.gz
 - tar -zxf hugo* hugo
 - chmod +x hugo
-- ./hugo
+- "./hugo"
 
 deploy:
   provider: s3
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  bucket: tvcio-blog-blogs3bucket-1f759wiitl083 # what a name
+  access_key_id: "$AWS_ACCESS_KEY_ID"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY"
+  bucket: tvcio-blog-tomverrans3bucket-10vd39k5pdjt
   region: eu-west-1
   skip_cleanup: true
   local_dir: public
   acl: public_read
 
+after_deploy:
+  - pip install --user awscli
+  - export PATH="${PATH}:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
+  - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*" > /dev/null
+
 env:
   global:
-  - secure: "Hfd4CwGs+jUxN/XQmJAjQCmIA4SQnuSuWnXfaES6WHArWK468xRUZlVygOLpThKRiGhYbp7W5BFCXWeiqO/IakV5BmZDALZBMqNreXTVx64fKohyMYjTTLD5lr/A2b+Z4WgYREmuS/EbvnRvuBUvSap/c19c7L2gSchOJpocLXsbFXZ6XaD47tYyDsMiC8fnXwuI4XzC/LN8AktSko5rRCYS8Eu9PXzHYih1vagpq+wWTkMo1nPxWN4NeU2tZ2MJwuX8sPXTyEPBXjIXG1hUX+hF8I5egiemKjGQRO7ypt3A2+4UrNcFV9Nlaf2ipp1xmoeOF7Wm8rfUawLenjQtqzX3IvOwuet8nmvPkzSAFao1J/X/ZI+7uBXF+Ye9io8UKiUjbTNdMhkFQ9dN2yPUxbhwucrZk1FUk4+WyXvPyyMfnQpjT3vQUn0zB9xnye5JPX+2rmEj7vnvDfaohHaeYEULFYHeq+eL5HkE5+B5x6k5f/FVu9HEajYCj4JrMjIhdjpcIdnwwXuTWO8rcoiir7vf+lArSQFPU0p9nkiuunPmN8OFodJpgfmBw3JFAxcUjzmXh3Tx7IOuWagsi0WgVldUzixzlNjJSqi3LcBwg20u/KfTUvMRfl1njuantw33yokf7VYlFAeTnc6MWoCwC5Swoav2cZKeExMwpx1fqPY="
-  - secure: "cqCHmObHi07FHBAfpD7/FQ/uh4Hb2BOZXk9vB6vH5dNsdZpBUSzntBHDUySYewRVjPqa6kmnlrysTHjkAgUkzm/MK0u925ZkRh5+E2AO3lfeAKj7EwWo1xU3Nq5tn0uOvdM0XDPgEW5aMjc7sqGEiDen166sw0E4NbsJUZG0L15A7quKK/+z8hAvw9bKAPztURP0RzeOdPcjjraaeyfUtbYhlQZAui4PSDpKYjiSonGMK9l4OHJEVIJVPj16CqiJLhkYI/en5PjGHMuvS7d4Ct6KXsG0e+kprvSweghoiX5TBKKT4Rm6vKtt2BMp/WaOWBFOTN6HfbOydy4oXyVPS+SWQrtIwLEKNAoZxnQlaz+14Sj4rwcl1q0VhDZq+BIey908oKCesjHRaRKubetVhAbea5QgAwaxJtSVgF82WotWbOXG0eFO+pOPIQ3qqwTm5AgMm6xYwxEj7rpfGxPElXPnWpari6FvNRFAj8JtOS9VQpL00kGtZeMuF1vxtZuj+4jh7/zCBBTgnYR96fih58fttAfiXLRyKUn0iZAmNtBr+Ge00w8vE43xrPamD0isa9YDpBQNixW3wSwxc7y3+PDcU/tQIYgFWDkIgP3R8d/TQcX7nqka+TOvhmSJJcKcGC/EGSRgzevIkKxbBaWSHQJG6zTOcChMHbYp6BabOlQ=" 
-
+  - secure: Hfd4CwGs+jUxN/XQmJAjQCmIA4SQnuSuWnXfaES6WHArWK468xRUZlVygOLpThKRiGhYbp7W5BFCXWeiqO/IakV5BmZDALZBMqNreXTVx64fKohyMYjTTLD5lr/A2b+Z4WgYREmuS/EbvnRvuBUvSap/c19c7L2gSchOJpocLXsbFXZ6XaD47tYyDsMiC8fnXwuI4XzC/LN8AktSko5rRCYS8Eu9PXzHYih1vagpq+wWTkMo1nPxWN4NeU2tZ2MJwuX8sPXTyEPBXjIXG1hUX+hF8I5egiemKjGQRO7ypt3A2+4UrNcFV9Nlaf2ipp1xmoeOF7Wm8rfUawLenjQtqzX3IvOwuet8nmvPkzSAFao1J/X/ZI+7uBXF+Ye9io8UKiUjbTNdMhkFQ9dN2yPUxbhwucrZk1FUk4+WyXvPyyMfnQpjT3vQUn0zB9xnye5JPX+2rmEj7vnvDfaohHaeYEULFYHeq+eL5HkE5+B5x6k5f/FVu9HEajYCj4JrMjIhdjpcIdnwwXuTWO8rcoiir7vf+lArSQFPU0p9nkiuunPmN8OFodJpgfmBw3JFAxcUjzmXh3Tx7IOuWagsi0WgVldUzixzlNjJSqi3LcBwg20u/KfTUvMRfl1njuantw33yokf7VYlFAeTnc6MWoCwC5Swoav2cZKeExMwpx1fqPY=
+  - secure: cqCHmObHi07FHBAfpD7/FQ/uh4Hb2BOZXk9vB6vH5dNsdZpBUSzntBHDUySYewRVjPqa6kmnlrysTHjkAgUkzm/MK0u925ZkRh5+E2AO3lfeAKj7EwWo1xU3Nq5tn0uOvdM0XDPgEW5aMjc7sqGEiDen166sw0E4NbsJUZG0L15A7quKK/+z8hAvw9bKAPztURP0RzeOdPcjjraaeyfUtbYhlQZAui4PSDpKYjiSonGMK9l4OHJEVIJVPj16CqiJLhkYI/en5PjGHMuvS7d4Ct6KXsG0e+kprvSweghoiX5TBKKT4Rm6vKtt2BMp/WaOWBFOTN6HfbOydy4oXyVPS+SWQrtIwLEKNAoZxnQlaz+14Sj4rwcl1q0VhDZq+BIey908oKCesjHRaRKubetVhAbea5QgAwaxJtSVgF82WotWbOXG0eFO+pOPIQ3qqwTm5AgMm6xYwxEj7rpfGxPElXPnWpari6FvNRFAj8JtOS9VQpL00kGtZeMuF1vxtZuj+4jh7/zCBBTgnYR96fih58fttAfiXLRyKUn0iZAmNtBr+Ge00w8vE43xrPamD0isa9YDpBQNixW3wSwxc7y3+PDcU/tQIYgFWDkIgP3R8d/TQcX7nqka+TOvhmSJJcKcGC/EGSRgzevIkKxbBaWSHQJG6zTOcChMHbYp6BabOlQ=
+  - secure: pmtwUc9h1wi4hTRNnW3TGGqQaPQzHfxzI26reZGiaXdIrqkFeLr2NUOvye+yKcVII4rExz51wxdgjWv+C8MFlkTrhHFEqTudd7qLaQets86W9jgPsj+rX3bfZqKzs3OkycqfgifinDQas/9BMgpgIL3ouWe+0vDBw6wpwD78k1FdAl0rXDGzEX+gHyYw0jYTjTzsWFLxkGT4LUe5BNRFO9yv9iQIRDoX90LCh6uA4rSfgepopeNNqVNshrH5TD/KcdpHQifJ4ktJGXUcuk21uNHpXZnGoAyQ7gQlDxwmkpPPfYSWxMjo4SFIiiIFkaOb33fwj0jrO3uVsQfH3pGEJnHMhjeeqNdONrWO0iPoLWkp35quDddpvYciyQAPpa/qnewVKxtaK9//kMgeWZBONpAGEyvn1YUUPOH3CuICNZExjh7TXk3iJS4P30VuvY5e/dmOpPkglWr+ClrgsgDatDSU7+kAqbKLozIkJz5lRaloqrq6veFecHcYawmoLDpjcy6CETMp4NCovpCsNdJTqM8PEMO3S5zLBFrwJDhD4soAePwaQuQ5vuZwMZX/lzPKwybo+5TdpH1+dByPczgTxYtDhBjC7rN9k6YHrZjs5SeqEzEdTy+7Rynyx1F5Jp6Nbo47510V/ct0/O0oNTVomNtuzGvr4TOimgPrq2vd8Xw=
