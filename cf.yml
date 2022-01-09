@@ -134,4 +134,6 @@ Resources:
             - cloudfront:CreateInvalidation
             Resource:
             - !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${BlogCloudfront}"
+            - !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${TomVerranCloudFront}"
+
           
