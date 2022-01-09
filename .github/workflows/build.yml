@@ -17,7 +17,7 @@ jobs:
           chmod +x hugo
           ./hugo
       - name: Upload the website
-        run: aws s3 sync ./public s3://${WEBSITE_BUCKET}
+        run: aws s3 sync --acl public-read ./public s3://${WEBSITE_BUCKET}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
