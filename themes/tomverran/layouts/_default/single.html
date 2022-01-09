@@ -1,2 +1,6 @@
-
-wofwoefj
+{{ define "main" }}
+ <h1 class="mt-4">{{ .Title }}</h1>
+ <h5 class="text-muted">{{ .Date | time.Format "2 January 2006" }}</h5>
+ <hr/>
+ {{ .Content }}
+{{ end }}

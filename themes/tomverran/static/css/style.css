@@ -1,4 +1,4 @@
-body {
+.page-home, .page-section {
   background-color: #f9f9f9;
 }
 
@@ -8,4 +8,9 @@ a:link {
 
 a:hover {
   text-decoration: underline;
+}
+
+pre {
+  padding: 1rem;
+  border-radius: 1rem;
 }

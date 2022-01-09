@@ -1,0 +1,20 @@
+{{ define "main" }}
+  <h1 class="mt-4 mb-4">{{ .Title }}</h1>
+  {{ $posts := slice }}
+  {{ range .Pages }}
+  <div class="row mb-2">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="row mb-2 mb-md-1">
+          <div class="col-md">
+            <h5>{{ .Title }}</h5>
+          </div>
+        </div>
+        <h6 class="card-subtitle mb-2 text-muted">{{ .Date.Format "2 January 2006" }}</h6>
+        <p class="card-text">{{ .Summary }}</p>
+        <a class="card-link" href="{{ .Permalink }}">Read full post</a>
+      </div>
+    </div>
+  </div>
+  {{ end }}
+{{ end }}

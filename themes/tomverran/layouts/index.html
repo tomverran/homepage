@@ -1,14 +1,38 @@
 {{ define "main" }}
   
-  <h1 class="mt-2 mb-4 text-center">{{ .Site.Title }}</h1>
+  <h1 class="mt-3 mb-3 text-center">{{ .Site.Title }}</h1>
 
-  <div class="row mb-2">
+  <div class="row">
     {{ .Content }}
   </div>
+
+  <h2 class="mb-4">Blog posts</h2>
+
+  {{ $posts := slice }}
+  {{ range ($.GetPage "blog").RegularPages }}
+  <div class="row mb-2">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="row mb-2 mb-md-1">
+          <div class="col-md">
+            <h5>{{ .Title }}</h5>
+          </div>
+        </div>
+        <h6 class="card-subtitle mb-2 text-muted">{{ .Date.Format "2 January 2006" }}</h6>
+        <p class="card-text">{{ .Summary }}</p>
+        <a class="card-link" href="{{ .Permalink }}">Read full post</a>
+      </div>
+    </div>
+  </div>
+  {{ end }}
+
+  <h2 class="mb-4 mt-4">Side projects</h2>
   
   {{ $pages := slice }}
   {{ range (where (readDir "content") ".IsDir" true) }}
-    {{ with $.GetPage .Name }} {{ $pages = $pages | append . }} {{ end }}
+    {{ if ne .Name "blog"}}
+      {{ with $.GetPage .Name }} {{ $pages = $pages | append . }} {{ end }}
+    {{ end }}
   {{ end }}
 
   {{ range sort $pages ".Date" "desc" }}
@@ -30,5 +54,4 @@
         </div>
       </div>
   {{ end }}
-
 {{ end }}
