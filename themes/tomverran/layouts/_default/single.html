@@ -1,5 +1,8 @@
 {{ define "main" }}
  <h1 class="mt-4">{{ .Title }}</h1>
+ {{ if .Page.Params.subtitle }}
+   <h3 class="text-muted mt-1 mb-4"><em>{{ .Page.Params.subtitle }}</em></h3>
+ {{ end }}
  <h5 class="text-muted">{{ .Date | time.Format "2 January 2006" }}</h5>
  <hr/>
  {{ .Content }}

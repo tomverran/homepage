@@ -1,5 +1,21 @@
-.page-home, .page-section {
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.page-home, .page-section, .gallery {
   background-color: #f9f9f9;
+}
+
+.page-image {
+  display: block;
+  height: 4rem;
+  margin: auto;
 }
 
 a:link {
@@ -13,4 +29,21 @@ a:hover {
 pre {
   padding: 1rem;
   border-radius: 1rem;
+}
+
+.gallery img.full {
+  height: 100%;
+  width: auto;
+}
+
+.gallery img.preview {
+  width: 100%;
+
+}
+.gallery .image-title {
+  color: white;
+  text-shadow: 1px 1px 3px #000;
+  position: absolute;
+  left: 40px;
+  top: 35px;
 }

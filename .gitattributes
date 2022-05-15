@@ -1,0 +1,5 @@
+content/gallery/waterloo-bridge/image.jpg filter=lfs diff=lfs merge=lfs -text
+content/gallery/blackfriars-pier/image.jpg filter=lfs diff=lfs merge=lfs -text
+content/gallery/rare-bird/image.jpg filter=lfs diff=lfs merge=lfs -text
+content/gallery/thames-barrier/image.jpg filter=lfs diff=lfs merge=lfs -text
+content/gallery/thames-panorama/image.jpg filter=lfs diff=lfs merge=lfs -text
