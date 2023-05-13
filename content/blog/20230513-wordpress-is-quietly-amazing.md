@@ -3,8 +3,8 @@ title: WordPress is quietly amazing
 date: 2023-05-13
 ---
 
-Recently I've updated two websites I started hosting for local organisations in 2009. 
-I certainly didn't imagine for one second that fourteen years later I'd still be hosting them and 
+Recently I've updated two websites I started hosting for local organisations in 2010. 
+I certainly didn't imagine for one second that thirteen years later I'd still be hosting them and 
 one of them was using a WordPress theme I wrote in 2011.
 
 <!--more-->
