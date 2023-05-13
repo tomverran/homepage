@@ -43,5 +43,5 @@ out there. I can't see any site built on a modern tech stack still being effortl
 decade given the incredibly low lifespan of quite foundational JS libraries.
 
 Even WordPress' codebase is coming back into fashion now that JavaScript developers 
-are starting to write about [_advanced new techiques_](https://medium.com/@ggonchar/api-less-architecture-with-react-server-component-e8d37c3b1a06)
-that let them merrily mix all of their database code into their HTML. 🙃
+are starting to use [React server components](https://nextjs.org/docs/app/building-your-application/data-fetching#fetching-data-on-the-server) and [styled-components](https://styled-components.com)
+to merrily mix all of their SQL, JS, CSS and HTML together. 🙃
