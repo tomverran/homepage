@@ -1,57 +1,56 @@
 {{ define "main" }}
     
-  <h1 class="mt-3 mb-3 text-center">{{ .Site.Title }}</h1>
+  <h1>{{ .Site.Title }}</h1>
 
-  <div class="row">
-    {{ .Content }}
-  </div>
+  <section>
+    <article>
+      {{ .Content }}
+    </article>
+  </section>
 
-  <h2 class="mb-4">Blog posts</h2>
-
-  {{ $posts := slice }}
-  {{ range ($.GetPage "blog").RegularPages }}
-  <div class="row mb-2">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <div class="row mb-2 mb-md-1">
-          <div class="col-md">
-            <h5>{{ .Title }}</h5>
-          </div>
-        </div>
-        <h6 class="card-subtitle mb-2 text-muted">{{ .Date.Format "2 January 2006" }}</h6>
-        <p class="card-text">{{ .Summary }}</p>
-        <a class="card-link" href="{{ .Permalink }}">Read full post</a>
-      </div>
-    </div>
-  </div>
-  {{ end }}
-
-  <h2 class="mb-4 mt-4">Side projects</h2>
-  
-  {{ $pages := slice }}
-  {{ range (where (readDir "content") ".IsDir" true) }}
-    {{ if and (ne .Name "blog") (ne .Name "gallery") }}
-      {{ with $.GetPage .Name }} {{ $pages = $pages | append . }} {{ end }}
+  <section>
+    <h2>Blog posts</h2>
+    {{ $posts := slice }}
+    {{ range ($.GetPage "blog").RegularPages }}
+      <article>
+        <hgroup>
+          <h3>{{ .Title }}</h3>
+          <p><time datetime="{{ .Date }}">{{ .Date.Format "January 2006" }}</time></p>
+        </hgroup>
+        <p>{{ .Summary }}</p>
+        <footer>
+          <a href="{{ .Permalink }}">Read full post</a>
+        </footer>
+      </article>
     {{ end }}
-  {{ end }}
+  </section>
 
-  {{ range sort $pages ".Date" "desc" }}
-      <div class="row mb-2">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <div class="row mb-2 mb-md-1">
-              <div class="col-md">
-                <h5>{{ .Title }}</h5>
-              </div>
-              <div class="col-md text-md-end">
-                {{ range .Params.techs | sort }}<span class="badge tech-{{ lower . }} bg-light text-dark me-1 border">{{ . }}</span>{{ end }}
-              </div>
-            </div>
-            <h6 class="card-subtitle mb-2 text-muted">Created {{ .Date.Format "January 2006" }}</h6>
-            <p class="card-text">{{ .Content }}</p>
-            {{ range $title, $url := .Params.links }}<a class="card-link" href="{{ $url }}">{{ $title | humanize }}</a>{{ end }}
-          </div>
-        </div>
-      </div>
-  {{ end }}
+  <section>
+    <h2>Side projects</h2>
+    {{ $pages := slice }}
+    {{ range (where (readDir "content") ".IsDir" true) }}
+      {{ if and (ne .Name "blog") (ne .Name "gallery") }}
+        {{ with $.GetPage .Name }} {{ $pages = $pages | append . }} {{ end }}
+      {{ end }}
+    {{ end }}
+
+    {{ range sort $pages ".Date" "desc" }}
+        <article>
+          <hgroup>
+            <h3>{{ .Title }}</h3>
+            <p>
+              <time datetime="{{ .Date }}">{{ .Date.Format "January 2006" }}</time>
+              {{ range .Params.techs | sort }}<span class="pill">{{ . }}</span>{{ end }}
+            </p>
+          </hgroup>
+
+          <p>{{ .Content }}</p>
+          <footer>
+            {{ range $title, $url := .Params.links }}
+              <a href="{{ $url }}">{{ $title | humanize }}</a>
+            {{ end }}
+          </footer>
+        </article>
+    {{ end }}
+  </section>
 {{ end }}

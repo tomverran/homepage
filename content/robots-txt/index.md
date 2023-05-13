@@ -3,7 +3,7 @@ title: Robots.txt parser
 headless: true
 techs: [PHP]
 links: 
-  GitHub: https://github.com/tomverran/robots,
+  GitHub: https://github.com/tomverran/robots
   Packagist: https://packagist.org/packages/tomverran/robots-txt-checker
 date: 2014-04-14
 ---

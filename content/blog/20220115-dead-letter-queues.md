@@ -10,14 +10,14 @@ if they're not carefully configured and well thought through they can cause a lo
 
 <!--more-->
 
-#### The theory of dead letter queues
+### The theory of dead letter queues
 
 The idea goes that if your application fails to consume a message from the queue
 then that message is put to one side onto a dead letter queue so that subsequent messages
 can continue to be consumed. At a later stage the failed message can be moved out of the dead letter 
 queue and back onto the normal queue for re-consumption.
 
-#### The reality of message failures
+### The reality of message failures
 
 In my experience it is rare to come across a  temporary problem that only affects _some_ of the messages 
 an application consumes. It is far more common for an application to have a total outage - 
@@ -33,7 +33,7 @@ Applications always make assumptions about the data they've received and a failu
 a message can be a sign that one of those assumptions has been broken. When this happens 
 the safest response might be to stop everything and investigate rather than plow on regardless.
 
-#### Time limits and sequencing
+### Time limits and sequencing
 
 Dead letter queues generally don't have infinite retention and the result of this is a time limit
 during which you must fix whatever the underlying issue is (perhaps it is an issue with a third party
@@ -46,7 +46,7 @@ are put back onto the queue they came from as they will be consumed out of order
 relative to the messages that didn't fail. Depending on the domain this might not be a problem 
 but it should definitely be thought about ahead of time.
 
-#### Conclusion
+### Conclusion
 
 The purpose of this rant is not to say that dead letter queues are bad or shouldn't be used,
 I just think that they shouldn't be used _lightly_. Quite often they're set up as a catch-all

@@ -1,9 +1,13 @@
 {{ define "main" }}
- <h1 class="mt-4">{{ .Title }}</h1>
- {{ if .Page.Params.subtitle }}
-   <h3 class="text-muted mt-1 mb-4"><em>{{ .Page.Params.subtitle }}</em></h3>
- {{ end }}
- <h5 class="text-muted">{{ .Date | time.Format "2 January 2006" }}</h5>
- <hr/>
- {{ .Content }}
+ <article>
+  <hgroup>
+    <h1 class="mt-4">{{ .Title }}</h1>
+    {{ if .Page.Params.subtitle }}<p class="subtitle">"{{ .Page.Params.subtitle }}"</p>{{ end }}
+    <p><time datetime="{{ .Date }}">{{ .Date.Format "January 2006" }}</time></p>
+  </hgroup>
+  {{ .Content }}
+  <footer>
+      <a href="/">Back to homepage</a>
+  </footer>
+ </article>
 {{ end }}

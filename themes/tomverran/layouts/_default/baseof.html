@@ -3,11 +3,8 @@
   {{- partial "head.html" . -}}
   <body class="page-{{ .Kind }}">
     {{- partial "header.html" . -}}
-    <div class="container">
+    <main>
       {{- block "main" . }}{{- end }}
-    </div>
-    {{ if eq .Kind "page" }}
-    {{- partial "footer.html" . -}}
-    {{ end }}
+    </main>
   </body>
 </html>
